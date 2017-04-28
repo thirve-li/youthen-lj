@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjRoomInfo" table="LJ_ROOM_INFO">
+		<id name="id" column="ID" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		
+		<property name="kbnId" column="KBN_ID" type="java.lang.Integer"/>
+		<many-to-one name="kbn" class="com.youthen.master.persistence.entity.Kbn" column="KBN_ID" insert="false" update="false" lazy="false" not-found="ignore"></many-to-one>
+		<property name="code" column="CODE" type="java.lang.String" />
+		<property name="name" column="NAME" type="java.lang.String" />
+		<property name="buildingNo" column="BUILDING_NO" type="java.lang.Integer"/>
+        <property name="unitNo" column="UNIT_NO" type="java.lang.Integer"/>
+        <property name="roomNo" column="ROOM_NO" type="java.lang.Integer"/>
+        <property name="measureOfArea" column="MEASURE_OF_AREA" type="java.lang.Double"/>
+        <property name="measureOfLive" column="MEASURE_OF_LIVE" type="java.lang.Double"/>
+        <property name="priceSquareMeter" column="PRICE_SQUARE_METER" type="java.lang.Double"/>
+        <property name="totalPrice" column="TOTAL_PRICE" type="java.lang.Double"/>
+        <property name="mark" column="MARK" type="java.lang.String"/>
+        
+
+	</class>
+
+</hibernate-mapping>

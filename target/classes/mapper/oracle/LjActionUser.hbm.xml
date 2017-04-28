@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjActionUser" table="T_ACTION_USER">
+		<id name="id" column="ID" type="java.lang.Long">
+			<generator class="sequence">
+				<param name="sequence">T_ACTION_USER</param>
+			</generator>
+		</id>
+		<property name="actionId" column="ACTION_ID" type="java.lang.Long" />
+		<property name="userId" column="USER_ID" type="java.lang.String" />
+		<many-to-one name="user"
+			class="com.youthen.master.persistence.entity.LoginUser" column="USER_ID"
+			lazy="false" insert="false" update="false" not-found="ignore"></many-to-one>
+		<property name="type" column="TYPE" type="java.lang.Integer" />
+		
+		
+	</class>
+
+</hibernate-mapping>

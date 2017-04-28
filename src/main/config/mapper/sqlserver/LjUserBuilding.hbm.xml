@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjUserBuilding" table="LJ_USER_BUILDING">
+		<id name="id" column="ID" type="java.lang.Long">
+		    <generator class="identity"/>
+		</id>
+        
+		<property name="userId" column="USER_ID" type="java.lang.String"/>
+		<many-to-one name="user" class="com.youthen.master.persistence.entity.LoginUser" column="USER_ID" lazy="false"  insert="false" update="false"  not-found="ignore"></many-to-one>
+        <property name="roomInfoId" column="ROOM_INF_ID" type="java.lang.String"/>
+        <many-to-one name="roomInfo" class="com.youthen.lj.persistence.entity.LjRoomInfo" column="ROOM_INF_ID" lazy="false"  insert="false" update="false"  not-found="ignore"></many-to-one>
+	</class>
+
+</hibernate-mapping>

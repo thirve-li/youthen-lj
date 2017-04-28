@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjRepairCpln" table="LJ_REPAIR_CPLN">
+		<id name="id" column="ID" type="java.lang.Long">
+            <generator class="sequence">
+				<param name="sequence">LJ_REPAIR_CPLN</param>
+			</generator>            
+        </id>
+
+		<property name="title" column="TITLE" type="java.lang.String"/>
+		<property name="theContent" column="THE_CONTENT" type="java.lang.String"/>
+        <property name="image1" column="IMAGE_1" type="java.lang.String"/>
+        <property name="image2" column="IMAGE_2" type="java.lang.String"/>
+        <property name="image3" column="IMAGE_3" type="java.lang.String"/>
+        <property name="image4" column="IMAGE_4" type="java.lang.String"/>
+        <property name="image5" column="IMAGE_5" type="java.lang.String"/>
+        <property name="type" column="TYPE" type="java.lang.Integer"/>
+		<property name="repairItem" column="REPAIR_ITEM" type="java.lang.String" />
+		<property name="status" column="STATUS" type="java.lang.Integer" />
+		<property name="repairMan" column="REPAIRMAN" type="java.lang.String" />
+		<property name="receiverId" column="RECEIVER_ID" type="java.lang.String" />
+		<property name="reporterId" column="REPORTER_ID" type="java.lang.String" />
+		<property name="reportTime" column="REPORT_TIME" type="java.util.Date" />
+		<property name="roomCode" column="ROOM_CODE" type="java.lang.String"/>
+		<property name="finishTime" column="FINISH_TIME" type="java.lang.String"/>
+		<property name="serviceMark" column="SERVICE_MARK" type="java.lang.Integer" />
+		<property name="speedMark" column="SPEED_MARK" type="java.lang.Integer" />
+		<property name="updId" column="UPDATE_ID" type="java.lang.String" />
+		<property name="updTime" column="UPDATE_TIME" type="java.lang.String" />
+		<property name="versionNo" column="VERSION_NO" type="java.lang.Long" />
+		
+		 <property name="contacter" column="CONTACTER" type="java.lang.String"/>
+		<property name="contacterTel" column="CONTACTER_TEL" type="java.lang.String"/>
+		<property name="commentContent" column="COMMENT_CONTENT" type="java.lang.String"/>
+
+	</class>
+
+</hibernate-mapping>

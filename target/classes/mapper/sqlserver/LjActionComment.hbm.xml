@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjActionComment" table="LJ_ACTION_COMMENT">
+		<id name="id" column="ID" type="java.lang.Long">
+			<generator class="identity" />
+		</id>
+		<property name="actionId" column="ACTION_ID" type="java.lang.Long" />
+		<many-to-one name="action"
+			class="com.youthen.lj.persistence.entity.LjNotice" column="ACTION_ID"
+			lazy="false" insert="false" update="false" not-found="ignore"></many-to-one>
+		<property name="commentId" column="COMMENT_ID" type="java.lang.Long" />
+		<property name="levelId" column="LEVEL_ID" type="java.lang.Long" />
+		<property name="theContent" column="THE_CONTENT" type="java.lang.String" />
+		<property name="isgood" column="IS_GOOD" type="java.lang.Integer" />
+		<property name="status" column="STATUS" type="java.lang.Integer" />
+		<property name="type" column="TYPE" type="java.lang.Integer" />
+		<property name="createId" column="CREATER_ID" type="java.lang.String" />
+		<many-to-one name="user"
+			class="com.youthen.master.persistence.entity.LoginUser" column="CREATER_ID"
+			lazy="false" insert="false" update="false" not-found="ignore"></many-to-one>
+		<property name="createTime" column="CREATE_TIME" type="java.util.Date" />
+		<property name="updateId" column="UPDATER_ID" type="java.lang.String" />
+		<property name="updateTime" column="UPDATE_TIME" type="java.lang.String" />
+		<property name="versionNo" column="VERSION_NO" type="java.lang.Long" />
+	</class>
+</hibernate-mapping>

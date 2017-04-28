@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjMerchant" table="LJ_Merchant">
+		<id name="id" column="ID" type="java.lang.Long">
+            <generator class="sequence">
+				<param name="sequence">LJ_Merchant</param>
+			</generator>            
+        </id>
+		<property name="bigTypeId" column="BIG_TYPE_ID" type="java.lang.Long"/>
+		<many-to-one name="bigType" class="com.youthen.master.persistence.entity.Kbn" column="BIG_TYPE_ID" lazy="false" insert="false" update="false"  not-found="ignore"></many-to-one>
+		<property name="smallTypeId" column="SMALL_TYPE_ID" type="java.lang.Long"/>
+		<many-to-one name="smallType" class="com.youthen.master.persistence.entity.Kbn" column="SMALL_TYPE_ID" lazy="false" insert="false" update="false"  not-found="ignore"></many-to-one>
+        <property name="shopName" column="SHOP_NAME" type="java.lang.String"/>
+        <property name="companyName" column="COMPANY_NAME" type="java.lang.String"/>
+        <property name="address" column="ADDRESS" type="java.lang.String"/>
+        <property name="tel" column="TEL" type="java.lang.String"/>
+        <property name="goodAt" column="GOOD_AT" type="java.lang.String"/>
+        <property name="serviceType" column="SERVICE_TYPE" type="java.lang.String"/>
+        <property name="productSpec" column="PRODUCT_SPEC" type="java.lang.String"/>
+        <property name="shopSpec" column="SHOP_SPEC" type="java.lang.String"/>
+        <property name="priceRange" column="PRICE_RANGE" type="java.lang.String"/>
+        <property name="image1" column="IMAGE_1" type="java.lang.String"/>
+        <property name="image2" column="IMAGE_2" type="java.lang.String"/>
+        <property name="image3" column="IMAGE_3" type="java.lang.String"/>
+        <property name="image4" column="IMAGE_4" type="java.lang.String"/>
+        <property name="image5" column="IMAGE_5" type="java.lang.String"/>
+        <property name="status" column="STATUS" type="java.lang.Integer"/>
+        <property name="createrId" column="CREATER_ID" type="java.lang.String" />
+		<property name="createTime" column="CREATE_TIME" type="java.util.Date" />
+		<property name="updId" column="UPDATER_ID" type="java.lang.String" />
+		<property name="updTime" column="UPDATE_TIME" type="java.lang.String" />
+		<property name="versionNo" column="VERSION_NO" type="java.lang.Long" />
+
+	</class>
+
+</hibernate-mapping>

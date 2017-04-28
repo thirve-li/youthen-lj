@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.youthen.lj.persistence.entity">
+	<class name="LjGoods" table="LJ_GOODS">
+		<id name="id" column="ID" type="java.lang.Long">
+		    <generator class="identity"/>
+		</id>
+		 <property name="name" column="NAME" type="java.lang.String"/>
+		<property name="bigGoodsTypeId" column="BIG_GOODS_TYPE" type="java.lang.Long"/>
+		<many-to-one name="bigGoodsType" class="com.youthen.master.persistence.entity.Kbn" column="BIG_GOODS_TYPE" lazy="false" insert="false" update="false"  not-found="ignore"></many-to-one>
+		<property name="smallGoodsTypeId" column="SMALL_GOODS_TYPE" type="java.lang.Long"/>
+		<many-to-one name="smallGoodsType" class="com.youthen.master.persistence.entity.Kbn" column="SMALL_GOODS_TYPE" lazy="false" insert="false" update="false"  not-found="ignore"></many-to-one>
+        <property name="shopId" column="SHOP_ID" type="java.lang.Long"/>
+        <many-to-one name="shop" class="com.youthen.lj.persistence.entity.LjMerchant" column="SHOP_ID" lazy="false" insert="false" update="false"  not-found="ignore"></many-to-one>
+        <property name="price" column="PRICE" type="java.lang.Double"/>
+        <property name="leftCnt" column="LEFT_CNT" type="java.lang.Long"/>
+        <property name="remark" column="REMARK" type="java.lang.String"/>
+        <property name="isSecond" column="IS_SECOND" type="java.lang.Integer"/>
+        <property name="title" column="TITLE" type="java.lang.String"/>
+        <property name="validMonth" column="VALID_MONTH" type="java.lang.Integer"/>
+        <property name="validDate" column="VALID_DATE" type="java.util.Date"/>
+        <property name="brandName" column="BRAND_NAME" type="java.lang.String"/>
+        <property name="factory" column="FACTROY" type="java.lang.String"/>
+        <property name="madeDate" column="MADE_DATE" type="java.lang.String"/>
+        <property name="image1" column="IMAGE_1" type="java.lang.String"/>
+        <property name="image2" column="IMAGE_2" type="java.lang.String"/>
+        <property name="image3" column="IMAGE_3" type="java.lang.String"/>
+        <property name="image4" column="IMAGE_4" type="java.lang.String"/>
+        <property name="image5" column="IMAGE_5" type="java.lang.String"/>
+        <property name="status" column="STATUS" type="java.lang.Integer"/>
+        <property name="createrId" column="CREATER_ID" type="java.lang.String" />
+		<property name="createTime" column="CREATE_TIME" type="java.util.Date" />
+		<property name="updId" column="UPDATER_ID" type="java.lang.String" />
+		<property name="updTime" column="UPDATE_TIME" type="java.lang.String" />
+		<property name="versionNo" column="VERSION_NO" type="java.lang.Long" />
+		<property name="faceMark" column="FACE_MARK" type="java.lang.String" />
+
+		<set name="comments" table="LJ_ACTION_COMMENT" inverse="true"  order-by="createTime asc">
+			<key column="ACTION_ID"></key>
+			<one-to-many class="LjActionComment"></one-to-many>
+		</set> 
+	</class>
+
+</hibernate-mapping>
