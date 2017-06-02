@@ -313,6 +313,7 @@ public class MobileController {
                             break;
 
                         case Command.getPayStatus:
+                            System.out.println("getPayStatus方法:" + params);
                             result.append(this.ljAppService.getPayStatus(params));
                             break;
 
@@ -394,8 +395,7 @@ public class MobileController {
     String payNotify(final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
         logger.info("==================>微信支付成功后开始调用回调函数！！！！！！！");
-        this.ljAppService.payNotify(request, response);
-        return "";
+        return this.ljAppService.payNotify(request, response);
     }
 
     private Result isLogin(final HttpServletRequest request, final HttpServletResponse response) {

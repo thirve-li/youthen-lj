@@ -3036,12 +3036,14 @@ public class LjAppServiceImpl implements LjAppService {
 
     @Override
     public String getPayStatus(final String aParams) {
+        System.out.println("根据订单号，查询支付状态:" + aParams);
         logger.info("=====================>根据订单号，查询支付状态=" + aParams);
         final Result result = new Result();
         final Map<String, String> paramsMap = JsonUtils.stringToObject(aParams);
         final String orderNo = paramsMap.get("orderNo") == null ? "" : (String) paramsMap.get("orderNo");
 
         final String[] status = this.ljAppLogic.getPayStatus(orderNo);
+        System.out.println("支付状态:" + status[0] + "///////////////////////////////");
 
         if ("-1".equals(status[0])) {
             result.setMessageCode(Result.FAIL);
