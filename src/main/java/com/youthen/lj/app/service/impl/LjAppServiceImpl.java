@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.annotation.Resource;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
@@ -50,6 +52,7 @@ import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.tenpay.ClientRequestHandler;
 import com.tenpay.PrepayIdRequestHandler;
 import com.tenpay.ResponseHandler;
+import com.tenpay.Signature;
 import com.tenpay.client.ClientResponseHandler;
 import com.tenpay.util.TenpayUtil;
 import com.tenpay.util.WXUtil;
@@ -1645,6 +1648,9 @@ public class LjAppServiceImpl implements LjAppService {
         final Map paramsMap = JsonUtils.stringToObject(aParams);
         final String mobile = paramsMap.get("mobile") instanceof JSONNull ? "" : (String) paramsMap.get("mobile");
         final String type = paramsMap.get("type") instanceof JSONNull ? "" : (String) paramsMap.get("type");
+
+        final String openId = paramsMap.get("openid") instanceof JSONNull ? "" : (String) paramsMap.get("openid");
+
         final String payType = paramsMap.get("payType") instanceof JSONNull ? "" : (String) paramsMap.get("payType");
         final String months = paramsMap.get("months") instanceof JSONNull ? "" : (String) paramsMap.get("months");
         final String cuponId = paramsMap.get("cuponId") instanceof JSONNull ? "" : (String) paramsMap.get("cuponId");
@@ -1652,6 +1658,11 @@ public class LjAppServiceImpl implements LjAppService {
                 paramsMap.get("roomCode");
         final String total = paramsMap.get("total") instanceof JSONNull ? "" : (String) paramsMap.get("total");
         final Integer score = paramsMap.get("score") instanceof JSONNull ? 0 : (Integer) paramsMap.get("score");
+
+        String from = "";
+        if (StringUtils.isNotEmpty(openId)) {
+            from = "webchat";
+        }
 
         result = checkMobile(mobile);
         if (result.getMessageCode() == Result.FAIL) {
@@ -1713,7 +1724,7 @@ public class LjAppServiceImpl implements LjAppService {
         }
 
         return getPrepayId(mobile, feeHistory, roomCode,
-                type, request, response, result);
+                type, from, openId, request, response, result);
     }
 
     /**
@@ -1731,14 +1742,11 @@ public class LjAppServiceImpl implements LjAppService {
     @Transactional
     private String getPrepayId(final String mobile, final LjFeeHistoryDto feeHistory, final String roomCode,
             final String type,
+            final String from, final String openid,
             final HttpServletRequest request,
             final HttpServletResponse response,
             final Result result) {
         // ---------------生成订单号 开始------------------------
-        // 当前时间 yyyyMMddHHmmss
-        final String currTime = TenpayUtil.getCurrTime();
-        // 8位日期
-        final String strTime = currTime.substring(8, currTime.length());
         // 随机数
         final String strRandom = TenpayUtil.buildRandom(6) + "";
 
@@ -1751,9 +1759,11 @@ public class LjAppServiceImpl implements LjAppService {
 
         // ---------------生成订单号 结束------------------------
 
-        final PrepayIdRequestHandler prepayReqHandler = new PrepayIdRequestHandler(request, response);// 获取prepayid的请求类
+        // 获取prepayid的请求类
+        final PrepayIdRequestHandler prepayReqHandler = new PrepayIdRequestHandler(request, response);
 
-        final ClientRequestHandler clientHandler = new ClientRequestHandler(request, response);// 返回客户端支付参数的请求类
+        // 返回客户端支付参数的请求类
+        final ClientRequestHandler clientHandler = new ClientRequestHandler(request, response);
 
         String prepayId = "";
 
@@ -1762,61 +1772,60 @@ public class LjAppServiceImpl implements LjAppService {
         logger.info("=====================>noncestr:" + noncestr);
 
         // 设置获取prepayid支付参数
-        prepayReqHandler.setParameter("appid", AppConfig.APP_ID);
-        prepayReqHandler.setParameter("mch_id", AppConfig.APP_MERCHANT_ID);
-        prepayReqHandler.setParameter("device_info", "web");
-        prepayReqHandler.setParameter("nonce_str", noncestr);
+
+        final String[] code = roomCode.split("-");
+        final String info = "美丽苑" + code[1] + "号" + code[2] + "室 ";
         final String lastPeriod = feeHistory.getLastPeriod() == null ? "" : feeHistory.getLastPeriod().toString();
-        if ("0".equals(type)) {// 物业缴费
-
-            final String[] code = roomCode.split("-");
-            final String info = "美丽苑" + code[1] + "号" + code[2] + "室 ";
-
-            prepayReqHandler.setParameter("body", info + lastPeriod + " 物业管理费"); // 商品描述
-
-            prepayReqHandler.setParameter("detail", info + lastPeriod + " 物业管理费"); // 商品详情
-        } else {// 购物
-
-            // final String[] str = feeHistory.getGoodsIds().split(",");
-            // String goodsName = "";
-            // for (final String ids : str) {
-            // final String[] id = ids.split("_");
-            // final LjGoodsDto goods = this.ljGoodsService.getById(Long.valueOf(id[0]));
-            // goodsName += goods.getName() + "\n\r";
-            // }
-            prepayReqHandler.setParameter("body", "购物支付"); // 商品描述
-            prepayReqHandler.setParameter("detail", "购物支付"); // 商品详情
-        }
-
-        // prepayReqHandler.setParameter("attach", "山水国际");// 附加数据
-        prepayReqHandler.setParameter("out_trade_no", out_trade_no);// 商户订单号
-        prepayReqHandler.setParameter("fee_type", "CNY");// 货币类型
         long total_fee = (long) (feeHistory.getFee() * 100);
         total_fee = 1;
-        prepayReqHandler.setParameter("total_fee", String.valueOf(total_fee));// 缴费金额
         final String ip = getIpAddress(request);
-        // ip = "127.0.0.1";// @ for test
-        prepayReqHandler.setParameter("spbill_create_ip", ip);
+        String sign = "";
+        if ("webchat".equalsIgnoreCase(from)) {// 微信公众号支付
 
-        final Date now = new Date();
-        final java.util.Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, 30);
+            prepayReqHandler.setParameter("appid", AppConfig.ID_WEBCHAT);
+            prepayReqHandler.setParameter("mch_id", AppConfig.MERCHANT_ID_WEBCHAT);
+            prepayReqHandler.setParameter("trade_type", "JSAPI");
+            prepayReqHandler.setParameter("nonce_str", noncestr);
+            prepayReqHandler.setParameter("device_info", "web");
+            prepayReqHandler.setParameter("sign_type", "MD5");
+            prepayReqHandler.setParameter("body", info + lastPeriod + " 物业管理费"); // 商品描述
+            prepayReqHandler.setParameter("detail", info + lastPeriod + " 物业管理费"); // 商品详情
+            prepayReqHandler.setParameter("out_trade_no", out_trade_no);// 商户订单号
+            prepayReqHandler.setParameter("fee_type", "CNY");// 货币类型
+            prepayReqHandler.setParameter("total_fee", String.valueOf(total_fee));// 缴费金额
+            prepayReqHandler.setParameter("spbill_create_ip", ip);
+            prepayReqHandler.setParameter("notify_url", AppConfig.NOTIFY_URL);
+            prepayReqHandler.setParameter("openid", openid);
+            prepayReqHandler.setGateUrl(AppConfig.GATEURL);
 
-        // prepayReqHandler.setParameter("time_start", DateUtils.formatDate(now, "yyyyMMddHHmmss"));// 交易起始时间
-        // prepayReqHandler.setParameter("time_expire", DateUtils.formatDate(c.getTime(), "yyyyMMddHHmmss"));//
+            prepayReqHandler.setKey(AppConfig.API_KEY_WEBCHAT);
+            sign = prepayReqHandler.wxCreateSHA1Sign();
+            prepayReqHandler.setParameter("sign", sign);
 
-        // prepayReqHandler.setParameter("goods_tag", "");// 商品标记
-        prepayReqHandler.setParameter("notify_url", AppConfig.NOTIFY_URL);
-        prepayReqHandler.setParameter("trade_type", "APP");
-        prepayReqHandler.setGateUrl(AppConfig.GATEURL);
+        } else { // APP支付
+            prepayReqHandler.setParameter("appid", AppConfig.ID_APP);
+            prepayReqHandler.setParameter("mch_id", AppConfig.MERCHANT_ID_APP);
+            prepayReqHandler.setParameter("device_info", "web");
+            prepayReqHandler.setParameter("nonce_str", noncestr);
+            prepayReqHandler.setParameter("body", info + lastPeriod + " 物业管理费"); // 商品描述
+            prepayReqHandler.setParameter("detail", info + lastPeriod + " 物业管理费"); // 商品详情
+            prepayReqHandler.setParameter("body", "购物支付"); // 商品描述
+            prepayReqHandler.setParameter("detail", "购物支付"); // 商品详情
+            prepayReqHandler.setParameter("out_trade_no", out_trade_no);// 商户订单号
+            prepayReqHandler.setParameter("fee_type", "CNY");// 货币类型
+            prepayReqHandler.setParameter("total_fee", String.valueOf(total_fee));// 缴费金额
+            prepayReqHandler.setParameter("spbill_create_ip", ip);
+            prepayReqHandler.setParameter("notify_url", AppConfig.NOTIFY_URL);
+            prepayReqHandler.setParameter("trade_type", "APP");
+            prepayReqHandler.setGateUrl(AppConfig.GATEURL);
 
-        // 生成获取预支付签名
-        prepayReqHandler.setKey(AppConfig.API_KEY);
-        final String sign = prepayReqHandler.createSHA1Sign();
-        logger.info("=====================>createSHA1Sign: " + sign);
-        // 增加非参与签名的额外参数
-        prepayReqHandler.setParameter("sign", sign);
-        final String resContent = prepayReqHandler.sendPrepay();
+            // 生成获取预支付签名
+            prepayReqHandler.setKey(AppConfig.API_KEY_APP);
+            sign = prepayReqHandler.createSHA1Sign();
+            prepayReqHandler.setParameter("sign", sign);
+        }
+
+        final String resContent = prepayReqHandler.sendPrepay(from);
         logger.info("=====================>resContent: " + resContent);
 
         final ClientResponseHandler handler = new ClientResponseHandler();
@@ -1838,20 +1847,37 @@ public class LjAppServiceImpl implements LjAppService {
 
         // 吐回给客户端的参数
         if (StringUtils.isNotEmpty(prepayId)) {
+
             // 输出参数列表
-            // clientHandler.setParameter("appid", AppConfig.APP_ID);
-            // clientHandler.setParameter("appkey", AppConfig.API_KEY);
+            if ("webchat".equalsIgnoreCase(from)) { // 微信公众号
 
-            clientHandler.setParameter("NonceStr", noncestr);// 随机字符串1111111111
-            clientHandler.setParameter("PackageValue", "Sign=WXPay");// packageValue11111111111
-            // clientHandler.setParameter("partnerid", AppConfig.APP_MERCHANT_ID);
-            clientHandler.setParameter("PrepayId", prepayId);// 预付ID11111111111
-            clientHandler.setParameter("TimeStamp", timestamp);// 时间戳
-            clientHandler.setParameter("OrderId", out_trade_no);// 订单编号
+                clientHandler.setParameter("appid", AppConfig.ID_WEBCHAT);
+                clientHandler.setParameter("appkey", AppConfig.API_KEY_WEBCHAT);
+                clientHandler.setParameter("noncestr", noncestr);
+                clientHandler.setParameter("package", "Sign=WXPay");
+                clientHandler.setParameter("partnerid", AppConfig.MERCHANT_ID_WEBCHAT);
+                clientHandler.setParameter("prepayid", prepayId);
+                clientHandler.setParameter("timestamp", timestamp);
 
-            clientHandler.setParameter("opt", "payNotify");// 回调函数参数
-            clientHandler.setParameter("secretKey", AppConfig.SECRET_KEY);// 回调函数参数
-            clientHandler.setParameter("mobile", mobile);// 回调函数参数
+                final SortedMap<Object, Object> parameters = new TreeMap<Object, Object>();
+                parameters.put("appId", AppConfig.ID_WEBCHAT);
+                parameters.put("timeStamp", timestamp);
+                parameters.put("signType", "MD5");
+                parameters.put("nonceStr", noncestr);
+                parameters.put("package", "prepay_id=" + prepayId);
+                sign = Signature.createSign("UTF-8", parameters);
+
+                clientHandler.setParameter("sign", sign);
+            } else { // APP
+                clientHandler.setParameter("NonceStr", noncestr);// 随机字符串1111111111
+                clientHandler.setParameter("PackageValue", "Sign=WXPay");// packageValue11111111111
+                clientHandler.setParameter("PrepayId", prepayId);// 预付ID11111111111
+                clientHandler.setParameter("TimeStamp", timestamp);// 时间戳
+                clientHandler.setParameter("OrderId", out_trade_no);// 订单编号
+                clientHandler.setParameter("opt", "payNotify");// 回调函数参数
+                clientHandler.setParameter("secretKey", AppConfig.SECRET_KEY);// 回调函数参数
+                clientHandler.setParameter("mobile", mobile);// 回调函数参数
+            }
 
             try {
                 feeHistory.setPayNo(out_trade_no);
@@ -1877,6 +1903,11 @@ public class LjAppServiceImpl implements LjAppService {
                 str = "wxpay://"
                         + URLEncoder.encode(JSONObject.fromObject(clientHandler.getAllParameters()).toString(),
                                 "utf-8");
+
+                if ("webchat".equalsIgnoreCase(from)) {
+                    str = JSONObject.fromObject(clientHandler.getAllParameters()).toString();
+                }
+
             } catch (final UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -1890,6 +1921,7 @@ public class LjAppServiceImpl implements LjAppService {
         result.setResultObject(null);
         logger.info("=====================>统一下单获取prepayId失败!! params:" + handler.getParameter("return_msg"));
         return JSONObject.fromObject(result).toString();
+
     }
 
     /**
@@ -1913,10 +1945,10 @@ public class LjAppServiceImpl implements LjAppService {
             handler.setContent(text);
 
             // 商户号
-            final String partner = AppConfig.APP_MERCHANT_ID;
+            final String partner = AppConfig.MERCHANT_ID_APP;
 
             // 密钥
-            final String key = AppConfig.API_KEY;
+            final String key = AppConfig.API_KEY_APP;
 
             // 创建支付应答对象
             final ResponseHandler resHandler = new ResponseHandler(request, response);
@@ -1947,6 +1979,77 @@ public class LjAppServiceImpl implements LjAppService {
                     // }
                     //
                     // }
+
+                    dto.setStatus(1);
+                    dto.setTransactionId(resHandler.getParameter("transaction_id"));
+                    dto.setUpdTime(CommonUtils.dateToStr(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                    this.ljFeeHistoryService.update(dto);
+                }
+                final String str = "<xml>"
+                        + "<return_code><![CDATA[SUCCESS]]></return_code>"
+                        + "<return_msg><![CDATA[OK]]></return_msg>"
+                        + "</xml>";
+                return str;
+
+            }
+            else {
+                logger.info("支付失败");
+                result.setMessage("支付失败！" + text);
+                result.setMessageCode(Result.FAIL);
+            }
+        } catch (final Exception e) {
+            e.printStackTrace();
+            logger.info("微信回调函数异常：" + e.getMessage());
+            result.setMessage("微信回调函数异常：" + e.getMessage());
+            result.setMessageCode(Result.FAIL);
+        }
+
+        logger.info(JSONObject.fromObject(result).toString());
+        return JSONObject.fromObject(result).toString();
+    }
+
+    /**
+     * @see com.youthen.lj.app.service.LjAppService#wxpayNotify(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse)
+     */
+
+    @Override
+    public String wxpayNotify(final HttpServletRequest request, final HttpServletResponse response) {
+        logger.info("**************开始执行支付回调函数payNotify ********:");
+
+        final Result result = new Result();
+        try {
+
+            final ClientResponseHandler handler = new ClientResponseHandler();
+
+            final ServletInputStream inputStream = request.getInputStream();
+            final Scanner scanner = new Scanner(inputStream, "UTF-8");
+            final String text = scanner.useDelimiter("\\A").next();
+            scanner.close();
+            handler.setContent(text);
+
+            // 商户号
+            final String partner = AppConfig.MERCHANT_ID_WEBCHAT;
+
+            // 密钥
+            final String key = AppConfig.API_KEY_WEBCHAT;
+
+            // 创建支付应答对象
+            final ResponseHandler resHandler = new ResponseHandler(request, response);
+            resHandler.setParameter(handler.getAllParameters());
+            resHandler.setKey(key);
+
+            // 支付成功
+            if ("SUCCESS".equals(resHandler.getParameter("result_code"))
+                    && "SUCCESS".equals(resHandler.getParameter("return_code"))) {
+
+                final String outTradeNo = resHandler.getParameter("out_trade_no");
+                final LjFeeHistoryDto condtion = new LjFeeHistoryDto();
+                condtion.setPayNo(outTradeNo);
+
+                final List<LjFeeHistoryDto> dtoList = this.ljFeeHistoryService.getFeeHistoryList(condtion);
+                if (CollectionUtils.isNotEmpty(dtoList)) {
+                    final LjFeeHistoryDto dto = dtoList.get(0);
 
                     dto.setStatus(1);
                     dto.setTransactionId(resHandler.getParameter("transaction_id"));
@@ -2234,11 +2337,18 @@ public class LjAppServiceImpl implements LjAppService {
      */
 
     @Override
-    public Result getAccessToken(final String code) {
-        final String url =
-                "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + AppConfig.APP_ID + "&secret="
-                        + AppConfig.APP_SECRET + "&code="
-                        + code + "&grant_type=authorization_code";
+    public Result getAccessToken(final String code, String from) {
+        from = "webchat";
+        String url = "";
+        if ("webchat".equalsIgnoreCase(from)) {
+            url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + AppConfig.ID_WEBCHAT + "&secret="
+                    + AppConfig.SECRET_WEBCHAT + "&code="
+                    + code + "&grant_type=authorization_code";
+        } else {
+            url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + AppConfig.ID_APP + "&secret="
+                    + AppConfig.SECRET_APP + "&code="
+                    + code + "&grant_type=authorization_code";
+        }
         logger.info("====>URL==>" + url);
 
         final Result rs = new Result();

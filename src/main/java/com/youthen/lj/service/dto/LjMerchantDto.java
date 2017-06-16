@@ -141,6 +141,11 @@ public class LjMerchantDto extends MasterEntryDto {
     private Long versionNo;
 
     /**
+     * 是否置顶 0:否 1：置顶
+     */
+    private Integer isTop;
+
+    /**
      * getter for id.
      * 
      * @return id
@@ -591,6 +596,24 @@ public class LjMerchantDto extends MasterEntryDto {
      */
     public Integer getStatus() {
         return this.status;
+    }
+
+    /**
+     * getter for isTop.
+     * 
+     * @return isTop
+     */
+    public Integer getIsTop() {
+        return this.isTop;
+    }
+
+    /**
+     * setter for isTop.
+     * 
+     * @param aIsTop isTop
+     */
+    public void setIsTop(final Integer aIsTop) {
+        this.isTop = aIsTop;
     }
 
 }

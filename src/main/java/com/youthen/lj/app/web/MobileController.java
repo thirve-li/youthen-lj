@@ -62,7 +62,7 @@ public class MobileController {
                         case Command.getAccessToken:
                             final Map paramsMap2 = JsonUtils.stringToObject(params);
                             final String code = paramsMap2.get("code") == null ? "" : paramsMap2.get("code").toString();
-                            final Result accessTokenResult = this.ljAppService.getAccessToken(code);
+                            final Result accessTokenResult = this.ljAppService.getAccessToken(code, from);
                             result.append(JsonUtils.objectToString(accessTokenResult));
 
                             break;
@@ -396,6 +396,15 @@ public class MobileController {
             throws Exception {
         logger.info("==================>微信支付成功后开始调用回调函数！！！！！！！");
         return this.ljAppService.payNotify(request, response);
+    }
+
+    @RequestMapping(value = "/wxpayNotify")
+    public @ResponseBody
+    String wxpayNotify(final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
+        logger.info("==================>微信公众号支付成功后开始调用回调函数！！！！！！！");
+
+        return this.ljAppService.wxpayNotify(request, response);
     }
 
     private Result isLogin(final HttpServletRequest request, final HttpServletResponse response) {

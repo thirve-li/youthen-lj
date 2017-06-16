@@ -225,6 +225,19 @@ public class LjMerchantAction extends BaseAction {
         return "toTypeList";
     }
 
+    @SuppressWarnings("boxing")
+    @Action("isTop")
+    public String isTop() {
+        if (this.dto.getIsTop() == 0) {
+            this.dto.setIsTop(1);
+        }
+        else {
+            this.dto.setIsTop(0);
+        }
+        this.merchantService.update(this.dto);
+        return "tolist";
+    }
+
     @Action("deleteMerchant")
     public String deleteMerchant() {
 

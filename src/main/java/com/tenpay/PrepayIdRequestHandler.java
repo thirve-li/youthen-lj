@@ -49,7 +49,7 @@ public class PrepayIdRequestHandler extends RequestHandler {
             }
         }
 
-        sb.append("key=" + AppConfig.API_KEY);
+        sb.append("key=" + AppConfig.API_KEY_APP);
         // logger.info("params------>" + sb);
 
         System.out.println("=====================> sb:" + sb);
@@ -63,35 +63,80 @@ public class PrepayIdRequestHandler extends RequestHandler {
         return sign;
     }
 
+    public String wxCreateSHA1Sign() {
+        // logger.info("=====================> begin createSHA1Sign");
+
+        System.out.println("=====================> begin createSHA1Sign ");
+        final StringBuffer sb = new StringBuffer();
+        final Set es = super.getAllParameters().entrySet();
+        final Iterator it = es.iterator();
+        while (it.hasNext()) {
+            final Map.Entry entry = (Map.Entry) it.next();
+            final String k = (String) entry.getKey();
+            final String v = (String) entry.getValue();
+            if (null != v && !"".equals(v)
+                    && !"sign".equals(k) && !"key".equals(k)) {
+                sb.append(k + "=" + v + "&");
+            }
+        }
+        sb.append("key=" + AppConfig.API_KEY_WEBCHAT);
+        // logger.info("params------>" + sb);
+        System.out.println("=====================> sb:" + sb);
+        final String enc = TenpayUtil.getCharacterEncoding(this.request, this.response);
+        final String sign = MD5Util.MD5Encode(sb.toString(), enc).toUpperCase();
+        // logger.info("appsign------>" + sign);
+        System.out.println("=====================> appsign:" + sign);
+
+        return sign;
+
+    }
+
     // Ìá½»Ô¤Ö§¸¶
-    public String sendPrepay() throws JSONException {
+    public String sendPrepay(final String from) throws JSONException {
 
         // //logger.info("=====================> begin sendPrepay");
 
         System.out.println("=====================> begin sendPrepay");
         final String prepayid = "";
         final SortedMap map = super.getAllParameters();
-        final String params = "   <xml>"
-                + "<appid>" + map.get("appid") + "</appid>"
-                + "<mch_id>" + map.get("mch_id") + "</mch_id>"
-                + "<device_info>" + map.get("device_info") + "</device_info>"
-                + "<nonce_str>" + map.get("nonce_str") + "</nonce_str>"
-                + "<sign>" + map.get("sign") + "</sign>"
-                + "<body>" + map.get("body") + "</body>"
-                + "<detail>" + map.get("detail") + "</detail>"
-                // + " <attach>" + map.get("attach") + "</attach>"
-                + "<out_trade_no>" + map.get("out_trade_no") + "</out_trade_no>"
-                + "<fee_type>" + map.get("fee_type") + "</fee_type>"
-                + "<total_fee>" + map.get("total_fee") + "</total_fee>"
-                + "<spbill_create_ip>" + map.get("spbill_create_ip") + "</spbill_create_ip>"
-                // + "<time_start>" + map.get("time_start") + "</time_start>"
-                // + "<time_expire>" + map.get("time_expire") + "</time_expire>"
-                // + "<goods_tag>" + map.get("goods_tag") + "</goods_tag>"
-                + "<notify_url>" + map.get("notify_url") + "</notify_url>"
-                + "<trade_type>" + map.get("trade_type") + "</trade_type>"
-                // + " <limit_pay>" + map.get("limit_pay") + "</limit_pay>"
-                + " </xml>";
-        // //logger.info("params==>" + params);
+
+        String params = "";
+        if ("webchat".equalsIgnoreCase(from)) {
+            params = "   <xml>"
+                    + "<appid>" + map.get("appid") + "</appid>"
+                    + "<mch_id>" + map.get("mch_id") + "</mch_id>"
+                    + "<nonce_str>" + map.get("nonce_str") + "</nonce_str>"
+                    + "<device_info>" + map.get("device_info") + "</device_info>"
+                    + "<sign>" + map.get("sign") + "</sign>"
+                    + "<sign_type>" + map.get("sign_type") + "</sign_type>"
+                    + "<body>" + map.get("body") + "</body>"
+                    + "<detail>" + map.get("detail") + "</detail>"
+                    + "<out_trade_no>" + map.get("out_trade_no") + "</out_trade_no>"
+                    + "<fee_type>" + map.get("fee_type") + "</fee_type>"
+                    + "<total_fee>" + map.get("total_fee") + "</total_fee>"
+                    + "<spbill_create_ip>" + map.get("spbill_create_ip") + "</spbill_create_ip>"
+                    + "<notify_url>" + map.get("notify_url") + "</notify_url>"
+                    + "<trade_type>" + map.get("trade_type") + "</trade_type>"
+                    + " <openid>" + map.get("openid") + "</openid>"
+                    + " </xml>";
+        } else {
+            params = "   <xml>"
+                    + "<appid>" + map.get("appid") + "</appid>"
+                    + "<mch_id>" + map.get("mch_id") + "</mch_id>"
+                    + "<device_info>" + map.get("device_info") + "</device_info>"
+                    + "<nonce_str>" + map.get("nonce_str") + "</nonce_str>"
+                    + "<sign>" + map.get("sign") + "</sign>"
+                    + "<body>" + map.get("body") + "</body>"
+                    + "<detail>" + map.get("detail") + "</detail>"
+                    + "<out_trade_no>" + map.get("out_trade_no") + "</out_trade_no>"
+                    + "<fee_type>" + map.get("fee_type") + "</fee_type>"
+                    + "<total_fee>" + map.get("total_fee") + "</total_fee>"
+                    + "<spbill_create_ip>" + map.get("spbill_create_ip") + "</spbill_create_ip>"
+                    + "<notify_url>" + map.get("notify_url") + "</notify_url>"
+                    + "<trade_type>" + map.get("trade_type") + "</trade_type>"
+                    + " </xml>";
+        }
+        logger.info("params==>" + params);
         System.out.println("=====================> params " + params);
         final String requestUrl = super.getGateUrl();
         // //logger.info("requestUrl:" + requestUrl);

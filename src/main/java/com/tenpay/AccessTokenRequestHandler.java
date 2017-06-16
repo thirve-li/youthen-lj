@@ -38,8 +38,9 @@ public class AccessTokenRequestHandler extends RequestHandler {
      * @return
      */
     protected static String getTokenReal() {
-        final String requestUrl = ConstantUtil.TOKENURL + "?grant_type=" + ConstantUtil.GRANT_TYPE + "&appid="
-                + ConstantUtil.APP_ID + "&secret=" + ConstantUtil.APP_SECRET;
+
+        final String requestUrl = ConstantUtil.TOKENURL_APP + "?grant_type=" + ConstantUtil.GRANT_TYPE + "&appid="
+                + ConstantUtil.APP_ID_APP + "&secret=" + ConstantUtil.APP_SECRET_APP;
         String resContent = "";
         final TenpayHttpClient httpClient = new TenpayHttpClient();
         httpClient.setMethod("GET");
@@ -70,9 +71,9 @@ public class AccessTokenRequestHandler extends RequestHandler {
     private static boolean tokenIsExpire(final String access_token) {
         boolean flag = false;
         final PrepayIdRequestHandler wxReqHandler = new PrepayIdRequestHandler(null, null);
-        wxReqHandler.setParameter("appid", ConstantUtil.APP_ID);
+        wxReqHandler.setParameter("appid", ConstantUtil.APP_ID_APP);
         // wxReqHandler.setParameter("appkey",ConstantUtil.APP_KEY);
-        wxReqHandler.setParameter("mch_id", ConstantUtil.PARTNER);
+        wxReqHandler.setParameter("mch_id", ConstantUtil.PARTNER_APP);
         wxReqHandler.setParameter("noncestr", WXUtil.getNonceStr());
         wxReqHandler.setParameter("package", ConstantUtil.packageValue);
         wxReqHandler.setParameter("timestamp", WXUtil.getTimeStamp());
@@ -82,7 +83,7 @@ public class AccessTokenRequestHandler extends RequestHandler {
         final String sign = wxReqHandler.createSHA1Sign();
         wxReqHandler.setParameter("app_signature", sign);
         wxReqHandler.setParameter("sign_method", ConstantUtil.SIGN_METHOD);
-        final String gateUrl = ConstantUtil.GATEURL + access_token;
+        final String gateUrl = ConstantUtil.GATEURL_APP + access_token;
         wxReqHandler.setGateUrl(gateUrl);
 
         // ∑¢ÀÕ«Î«Û
