@@ -9,6 +9,10 @@ import com.youthen.lj.app.bean.Result;
 
 public class JsonUtils {
 
+    public static void main(final String[] args) {
+
+    }
+
     private static ObjectMapper mapper = new ObjectMapper();
     static Logger logger = Logger.getLogger(JsonUtils.class.getName());
 

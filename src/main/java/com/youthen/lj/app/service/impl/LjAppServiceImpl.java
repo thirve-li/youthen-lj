@@ -1414,6 +1414,8 @@ public class LjAppServiceImpl implements LjAppService {
                     paramsMap.get("contacterTel") == null ? "" : (String) paramsMap.get("contacterTel");
             final String contacter = paramsMap.get("nickName") == null ? "" : (String) paramsMap.get("nickName");
             final String type = paramsMap.get("type") == null ? "0" : (String) paramsMap.get("type");
+            final String serviceTime =
+                    paramsMap.get("serviceTime") == null ? "" : (String) paramsMap.get("serviceTime");
 
             final JSONArray images = (JSONArray) paramsMap.get("images");
 
@@ -1441,6 +1443,7 @@ public class LjAppServiceImpl implements LjAppService {
             cplDto.setContacter(contacter);
             cplDto.setContacterTel(contacterTel);
             cplDto.setStatus(0);
+            cplDto.setServiceTime(serviceTime);
 
             if (images != null) {
                 for (int i = 0; i < images.size(); i++) {

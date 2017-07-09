@@ -5,7 +5,10 @@
 
 package com.youthen.lj.service.dto;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.Locale;
 import com.youthen.framework.common.annotation.Dto;
 import com.youthen.master.service.dto.MasterEntryDto;
 
@@ -85,6 +88,26 @@ public class LjRepairCplnDto extends MasterEntryDto {
      * 接收人Id
      */
     private String receiverId;
+
+    private String serviceTime;
+
+    /**
+     * getter for serviceTime.
+     * 
+     * @return serviceTime
+     */
+    public String getServiceTime() {
+        return this.serviceTime;
+    }
+
+    /**
+     * setter for serviceTime.
+     * 
+     * @param aServiceTime serviceTime
+     */
+    public void setServiceTime(final String aServiceTime) {
+        this.serviceTime = aServiceTime;
+    }
 
     /**
      * 报修人、投诉人
@@ -573,6 +596,496 @@ public class LjRepairCplnDto extends MasterEntryDto {
      */
     public void setCommentContent(final String aCommentContent) {
         this.commentContent = aCommentContent;
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#charAt(int)
+     */
+    public char charAt(final int aArg0) {
+        return this.serviceTime.charAt(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#codePointAt(int)
+     */
+    public int codePointAt(final int aArg0) {
+        return this.serviceTime.codePointAt(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#codePointBefore(int)
+     */
+    public int codePointBefore(final int aArg0) {
+        return this.serviceTime.codePointBefore(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#codePointCount(int, int)
+     */
+    public int codePointCount(final int aArg0, final int aArg1) {
+        return this.serviceTime.codePointCount(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#compareTo(java.lang.String)
+     */
+    public int compareTo(final String aArg0) {
+        return this.serviceTime.compareTo(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#compareToIgnoreCase(java.lang.String)
+     */
+    public int compareToIgnoreCase(final String aArg0) {
+        return this.serviceTime.compareToIgnoreCase(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#concat(java.lang.String)
+     */
+    public String concat(final String aArg0) {
+        return this.serviceTime.concat(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#contains(java.lang.CharSequence)
+     */
+    public boolean contains(final CharSequence aArg0) {
+        return this.serviceTime.contains(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#contentEquals(java.lang.CharSequence)
+     */
+    public boolean contentEquals(final CharSequence aArg0) {
+        return this.serviceTime.contentEquals(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#contentEquals(java.lang.StringBuffer)
+     */
+    public boolean contentEquals(final StringBuffer aArg0) {
+        return this.serviceTime.contentEquals(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#endsWith(java.lang.String)
+     */
+    public boolean endsWith(final String aArg0) {
+        return this.serviceTime.endsWith(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(final Object aArg0) {
+        return this.serviceTime.equals(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#equalsIgnoreCase(java.lang.String)
+     */
+    public boolean equalsIgnoreCase(final String aArg0) {
+        return this.serviceTime.equalsIgnoreCase(aArg0);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#getBytes()
+     */
+    public byte[] getBytes() {
+        return this.serviceTime.getBytes();
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#getBytes(java.nio.charset.Charset)
+     */
+    public byte[] getBytes(final Charset aArg0) {
+        return this.serviceTime.getBytes(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @param aArg2
+     * @param aArg3
+     * @deprecated
+     * @see java.lang.String#getBytes(int, int, byte[], int)
+     */
+    @Deprecated
+    public void getBytes(final int aArg0, final int aArg1, final byte[] aArg2, final int aArg3) {
+        this.serviceTime.getBytes(aArg0, aArg1, aArg2, aArg3);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @throws UnsupportedEncodingException
+     * @see java.lang.String#getBytes(java.lang.String)
+     */
+    public byte[] getBytes(final String aArg0) throws UnsupportedEncodingException {
+        return this.serviceTime.getBytes(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @param aArg2
+     * @param aArg3
+     * @see java.lang.String#getChars(int, int, char[], int)
+     */
+    public void getChars(final int aArg0, final int aArg1, final char[] aArg2, final int aArg3) {
+        this.serviceTime.getChars(aArg0, aArg1, aArg2, aArg3);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return this.serviceTime.hashCode();
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#indexOf(int, int)
+     */
+    public int indexOf(final int aArg0, final int aArg1) {
+        return this.serviceTime.indexOf(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#indexOf(int)
+     */
+    public int indexOf(final int aArg0) {
+        return this.serviceTime.indexOf(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#indexOf(java.lang.String, int)
+     */
+    public int indexOf(final String aArg0, final int aArg1) {
+        return this.serviceTime.indexOf(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#indexOf(java.lang.String)
+     */
+    public int indexOf(final String aArg0) {
+        return this.serviceTime.indexOf(aArg0);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#intern()
+     */
+    public String intern() {
+        return this.serviceTime.intern();
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#isEmpty()
+     */
+    public boolean isEmpty() {
+        return this.serviceTime.isEmpty();
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#lastIndexOf(int, int)
+     */
+    public int lastIndexOf(final int aArg0, final int aArg1) {
+        return this.serviceTime.lastIndexOf(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#lastIndexOf(int)
+     */
+    public int lastIndexOf(final int aArg0) {
+        return this.serviceTime.lastIndexOf(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#lastIndexOf(java.lang.String, int)
+     */
+    public int lastIndexOf(final String aArg0, final int aArg1) {
+        return this.serviceTime.lastIndexOf(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#lastIndexOf(java.lang.String)
+     */
+    public int lastIndexOf(final String aArg0) {
+        return this.serviceTime.lastIndexOf(aArg0);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#length()
+     */
+    public int length() {
+        return this.serviceTime.length();
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#matches(java.lang.String)
+     */
+    public boolean matches(final String aArg0) {
+        return this.serviceTime.matches(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#offsetByCodePoints(int, int)
+     */
+    public int offsetByCodePoints(final int aArg0, final int aArg1) {
+        return this.serviceTime.offsetByCodePoints(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @param aArg2
+     * @param aArg3
+     * @param aArg4
+     * @return
+     * @see java.lang.String#regionMatches(boolean, int, java.lang.String, int, int)
+     */
+    public boolean regionMatches(final boolean aArg0, final int aArg1, final String aArg2, final int aArg3,
+            final int aArg4) {
+        return this.serviceTime.regionMatches(aArg0, aArg1, aArg2, aArg3, aArg4);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @param aArg2
+     * @param aArg3
+     * @return
+     * @see java.lang.String#regionMatches(int, java.lang.String, int, int)
+     */
+    public boolean regionMatches(final int aArg0, final String aArg1, final int aArg2, final int aArg3) {
+        return this.serviceTime.regionMatches(aArg0, aArg1, aArg2, aArg3);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#replace(char, char)
+     */
+    public String replace(final char aArg0, final char aArg1) {
+        return this.serviceTime.replace(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#replace(java.lang.CharSequence, java.lang.CharSequence)
+     */
+    public String replace(final CharSequence aArg0, final CharSequence aArg1) {
+        return this.serviceTime.replace(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#replaceAll(java.lang.String, java.lang.String)
+     */
+    public String replaceAll(final String aArg0, final String aArg1) {
+        return this.serviceTime.replaceAll(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#replaceFirst(java.lang.String, java.lang.String)
+     */
+    public String replaceFirst(final String aArg0, final String aArg1) {
+        return this.serviceTime.replaceFirst(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#split(java.lang.String, int)
+     */
+    public String[] split(final String aArg0, final int aArg1) {
+        return this.serviceTime.split(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#split(java.lang.String)
+     */
+    public String[] split(final String aArg0) {
+        return this.serviceTime.split(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#startsWith(java.lang.String, int)
+     */
+    public boolean startsWith(final String aArg0, final int aArg1) {
+        return this.serviceTime.startsWith(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#startsWith(java.lang.String)
+     */
+    public boolean startsWith(final String aArg0) {
+        return this.serviceTime.startsWith(aArg0);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#subSequence(int, int)
+     */
+    public CharSequence subSequence(final int aArg0, final int aArg1) {
+        return this.serviceTime.subSequence(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @param aArg1
+     * @return
+     * @see java.lang.String#substring(int, int)
+     */
+    public String substring(final int aArg0, final int aArg1) {
+        return this.serviceTime.substring(aArg0, aArg1);
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#substring(int)
+     */
+    public String substring(final int aArg0) {
+        return this.serviceTime.substring(aArg0);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#toCharArray()
+     */
+    public char[] toCharArray() {
+        return this.serviceTime.toCharArray();
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#toLowerCase()
+     */
+    public String toLowerCase() {
+        return this.serviceTime.toLowerCase();
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#toLowerCase(java.util.Locale)
+     */
+    public String toLowerCase(final Locale aArg0) {
+        return this.serviceTime.toLowerCase(aArg0);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#toString()
+     */
+    @Override
+    public String toString() {
+        return this.serviceTime.toString();
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#toUpperCase()
+     */
+    public String toUpperCase() {
+        return this.serviceTime.toUpperCase();
+    }
+
+    /**
+     * @param aArg0
+     * @return
+     * @see java.lang.String#toUpperCase(java.util.Locale)
+     */
+    public String toUpperCase(final Locale aArg0) {
+        return this.serviceTime.toUpperCase(aArg0);
+    }
+
+    /**
+     * @return
+     * @see java.lang.String#trim()
+     */
+    public String trim() {
+        return this.serviceTime.trim();
     }
 
 }

@@ -43,6 +43,7 @@ import com.youthen.master.service.dto.KbnDto;
         @Result(name = "toList", location = "/lj-repair/list.action?dto.type=${dto.type}", type = "redirect"),
         @Result(name = "entityInit", location = "/WEB-INF/jsp/lj/admin/repairCpln/entity.jsp"),
         @Result(name = "toDealWith", location = "/WEB-INF/jsp/lj/admin/repairCpln/toDealWith.jsp"),
+        @Result(name = "toAcceptWith", location = "/WEB-INF/jsp/lj/admin/repairCpln/toAcceptWith.jsp"),
         @Result(name = "view", location = "/WEB-INF/jsp/lj/admin/repairCpln/view.jsp")
 })
 @Controller
@@ -205,6 +206,12 @@ public class LjRepairCplnAction extends BaseAction {
         return "toDealWith";
     }
 
+    @Action("toAcceptWith")
+    public String toAcceptWith() {
+        this.dto = this.ljRepairCplnService.getById(this.dto.getId());
+        return "toAcceptWith";
+    }
+
     /**
      * 保存操作
      */
@@ -261,7 +268,9 @@ public class LjRepairCplnAction extends BaseAction {
 
                 this.ljRepairCplnService.update(this.dto);
                 this.dto = this.ljRepairCplnService.getById(this.dto.getId());
-                if (this.dto.getStatus() == 1) {
+                if (this.dto.getStatus() == 0) {
+                    this.dto.setStatus(1);
+                } else if (this.dto.getStatus() == 1) {
                     this.dto.setStatus(2);
                 }
                 this.ljRepairCplnService.update(this.dto);

@@ -139,6 +139,11 @@ public class LjMerchant extends AbstractCommonEntity {
     private Long versionNo;
 
     /**
+     * 是否置顶 0:否 1：置顶
+     */
+    private Integer isTop;
+
+    /**
      * getter for id.
      * 
      * @return id
@@ -588,6 +593,24 @@ public class LjMerchant extends AbstractCommonEntity {
      */
     public void setStatus(final Integer aStatus) {
         this.status = aStatus;
+    }
+
+    /**
+     * getter for isTop.
+     * 
+     * @return isTop
+     */
+    public Integer getIsTop() {
+        return this.isTop;
+    }
+
+    /**
+     * setter for isTop.
+     * 
+     * @param aIsTop isTop
+     */
+    public void setIsTop(final Integer aIsTop) {
+        this.isTop = aIsTop;
     }
 
     /**

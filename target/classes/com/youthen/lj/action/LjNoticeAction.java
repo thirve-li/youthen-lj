@@ -187,7 +187,7 @@ public class LjNoticeAction extends BaseAction {
                 this.noticeService.update(this.dto);
             } else {
                 final Long parmsId = this.noticeService.insert(this.dto);
-                if (this.dto.getType() == 0 || this.dto.getType() == 1 || this.dto.getType() == 6) {
+                if (this.dto.getType() == 0 || this.dto.getType() == 1) {
                     final LoginUserDto condition = new LoginUserDto();
 
                     condition.setPageSize(9999);
@@ -204,9 +204,9 @@ public class LjNoticeAction extends BaseAction {
                         if (this.dto.getType() == 1) {
                             msgDto.setTypeName("2");
                         }
-                        if (this.dto.getType() == 6) {
-                            msgDto.setTypeName("3");
-                        }
+                        // if (this.dto.getType() == 6) {
+                        // msgDto.setTypeName("3");
+                        // }
 
                         this.dto.setCreateTime(new Date());
 

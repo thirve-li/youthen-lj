@@ -321,6 +321,7 @@ public class Command {
         commandMap.put("myPostPay", myPostPay);
         commandMap.put("pay", pay);
         commandMap.put("payNotify", payNotify);
+        commandMap.put("getPayStatus", getPayStatus);
 
         commandMap.put("repairOrCpln", repairOrCpln);
         commandMap.put("editUserInfo", editUserInfo);

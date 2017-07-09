@@ -33,6 +33,8 @@ public class LjRepairCpln extends AbstractCommonEntity {
      */
     private String title;
 
+    private String serviceTime;
+
     /**
      * 内容
      */
@@ -528,6 +530,24 @@ public class LjRepairCpln extends AbstractCommonEntity {
      */
     public void setCommentContent(final String aCommentContent) {
         this.commentContent = aCommentContent;
+    }
+
+    /**
+     * getter for serviceTime.
+     * 
+     * @return serviceTime
+     */
+    public String getServiceTime() {
+        return this.serviceTime;
+    }
+
+    /**
+     * setter for serviceTime.
+     * 
+     * @param aServiceTime serviceTime
+     */
+    public void setServiceTime(final String aServiceTime) {
+        this.serviceTime = aServiceTime;
     }
 
 }

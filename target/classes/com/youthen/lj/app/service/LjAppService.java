@@ -53,7 +53,7 @@ public interface LjAppService {
      * @param code
      * @return
      */
-    public Result getAccessToken(String code);
+    public Result getAccessToken(String code, String from);
 
     /**
      * 获取微信用户的基本信息
@@ -286,6 +286,15 @@ public interface LjAppService {
      * @return
      */
     public String payNotify(HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 微信公众号支付返回接口
+     * 。
+     * 
+     * @param params
+     * @return
+     */
+    public String wxpayNotify(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 发送提示短信

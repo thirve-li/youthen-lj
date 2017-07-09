@@ -10,6 +10,7 @@
 		</id>
         
 		<property name="title" column="TITLE" type="java.lang.String"/>
+		<property name="serviceTime" column="SERVICE_TIME" type="java.lang.String"/>
 		<property name="theContent" column="THE_CONTENT" type="java.lang.String"/>
         <property name="image1" column="IMAGE_1" type="java.lang.String"/>
         <property name="image2" column="IMAGE_2" type="java.lang.String"/>
