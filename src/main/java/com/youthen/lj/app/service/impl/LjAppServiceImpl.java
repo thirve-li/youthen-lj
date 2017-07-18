@@ -2231,7 +2231,7 @@ public class LjAppServiceImpl implements LjAppService {
     @Override
     public String index() {
 
-        final String params = "{\"pagesSize\":5,\"gotoPage\":1,\"type\":6}";
+        final String params = "{\"pagesSize\":5,\"gotoPage\":1,\"type\":2}";
         final String noticeList = this.getNoticeOrActiveList(params);
 
         final Result result = new Result();
