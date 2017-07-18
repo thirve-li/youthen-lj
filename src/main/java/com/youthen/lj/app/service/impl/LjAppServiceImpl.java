@@ -63,6 +63,7 @@ import com.youthen.framework.common.exception.ObjectNotFoundException;
 import com.youthen.framework.common.exception.OptimisticLockStolenException;
 import com.youthen.framework.util.BeanUtils;
 import com.youthen.framework.util.CommonUtils;
+import com.youthen.framework.util.MailSender;
 import com.youthen.framework.util.VertifyCodeUtils;
 import com.youthen.lj.app.bean.AppActionUser;
 import com.youthen.lj.app.bean.AppActive;
@@ -1469,11 +1470,44 @@ public class LjAppServiceImpl implements LjAppService {
                 }
             }
             final Long id = this.ljRepairCplnService.insert(cplDto);
-            result.setMessage("报修或投诉成功！");
-            result.setMessageCode(Result.SUCCESS);
-            result.setResultObject(id);
-            logger.info("报修或投诉成功！" + JSONObject.fromObject(result).toString());
-            return JSONObject.fromObject(result).toString();
+
+            if (id > 0) {
+                final MailSender sender = new MailSender();
+
+                String mailContent = "";
+                String subject = "";
+                final String email = "mlybaoxiu@163.com";
+
+                if (cplDto.getType().intValue() == 0) {
+                    subject = "亲~有新的报修了！";
+                    mailContent += "报修地址：" + cplDto.getRoomCode();
+                    mailContent += "报修人手机：" + mobile;
+                    mailContent += "联系人：" + cplDto.getContacter();
+                    mailContent += "联系人电话：" + cplDto.getContacterTel();
+                    mailContent += "上门时间：" + cplDto.getServiceTime();
+                    mailContent += "报修物品：" + cplDto.getRepairItem();
+                    mailContent += "报修原因：" + cplDto.getTheContent();
+                } else {
+                    subject = "亲~有新的投诉了！";
+                    mailContent += "投诉人房屋编号：" + cplDto.getRoomCode();
+                    mailContent += "投诉人手机：" + mobile;
+                    mailContent += "投诉人内容：" + cplDto.getTheContent();
+                }
+
+                // sender.send(email, subject, mailContent);
+
+                result.setMessage("报修或投诉成功！");
+                result.setMessageCode(Result.SUCCESS);
+                result.setResultObject(id);
+                logger.info("报修或投诉成功！" + JSONObject.fromObject(result).toString());
+                return JSONObject.fromObject(result).toString();
+            } else {
+                result.setMessage("报修或投诉成功！");
+                result.setMessageCode(Result.SUCCESS);
+                result.setResultObject(id);
+                logger.info("报修或投诉成功！" + JSONObject.fromObject(result).toString());
+                return JSONObject.fromObject(result).toString();
+            }
 
         } catch (final Exception e) {
             e.printStackTrace();
@@ -1689,8 +1723,11 @@ public class LjAppServiceImpl implements LjAppService {
         feeHistory.setType(Integer.parseInt(type));
         feeHistory.setRoomCode(roomCode);
 
-        if (StringUtils.isNotEmpty(total)) {
-            feeHistory.setFee(Double.valueOf(total));
+        if (StringUtils.isNotEmpty(months)) {
+            final Date date = DateFormatUtils.stringToDate(roomInfo.getLastPeriod(), "yyyyMM");
+            final Date date2 = DateFormatUtils.addMonth(date, Integer.valueOf(months));
+            final String lastPeriod = DateFormatUtils.format(date2, "yyyyMM");
+            feeHistory.setLastPeriod(Integer.valueOf(lastPeriod));
         }
 
         if (StringUtils.isNotEmpty(payType)) {
@@ -1707,12 +1744,12 @@ public class LjAppServiceImpl implements LjAppService {
             final double totalMoney = price * Integer.valueOf(months);
             final BigDecimal d = new BigDecimal(totalMoney);
             d.setScale(2, BigDecimal.ROUND_HALF_UP);
-            feeHistory.setFee(d.doubleValue());
+            feeHistory.setFee(String.valueOf(d.doubleValue()));
         }
         else {
             final BigDecimal d = new BigDecimal(total);
             d.setScale(2, BigDecimal.ROUND_HALF_UP);
-            feeHistory.setFee(d.doubleValue());
+            feeHistory.setFee(String.valueOf(d.doubleValue()));
         }
 
         if (roomInfo != null) {
@@ -1779,7 +1816,7 @@ public class LjAppServiceImpl implements LjAppService {
         final String[] code = roomCode.split("-");
         final String info = "美丽苑" + code[1] + "号" + code[2] + "室 ";
         final String lastPeriod = feeHistory.getLastPeriod() == null ? "" : feeHistory.getLastPeriod().toString();
-        long total_fee = (long) (feeHistory.getFee() * 100);
+        long total_fee = (long) (Double.valueOf(feeHistory.getFee()) * 100);
         total_fee = 1;
         final String ip = getIpAddress(request);
         String sign = "";
@@ -1982,6 +2019,11 @@ public class LjAppServiceImpl implements LjAppService {
                     // }
                     //
                     // }
+
+                    // 更新最后缴费期数
+                    final LjRoomInfoDto room = this.ljRoomInfoService.getById(dto.getRoomId());
+                    room.setLastPeriod(dto.getLastPeriod().toString());
+                    this.ljRoomInfoService.update(room);
 
                     dto.setStatus(1);
                     dto.setTransactionId(resHandler.getParameter("transaction_id"));

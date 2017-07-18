@@ -65,7 +65,9 @@ public class LjUserBuildingServiceImpl implements LjUserBuildingService {
                 final RoomInfo roomInfo = new RoomInfo();
                 roomInfo.setId(item.getId().toString());
                 roomInfo.setPrice(String.valueOf(item.getRoomInfo().getTotalPrice()));
+                roomInfo.setLastPeriod(item.getRoomInfo().getLastPeriod());
                 final String roomCode = item.getRoomInfo().getCode();
+
                 if (StringUtils.isNotEmpty(roomCode)) {
                     roomInfo.setRoomCode(roomCode);
                 }

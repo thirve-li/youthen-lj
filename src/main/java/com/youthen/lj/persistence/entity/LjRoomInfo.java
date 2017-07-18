@@ -81,9 +81,16 @@ public class LjRoomInfo extends AbstractCommonEntity {
     private double totalPrice;
 
     /**
+     * 最后缴费期数
+     */
+    private String lastPay;
+
+    /**
      * 备注
      */
     private String mark;
+
+    private String lastPeriod;
 
     /**
      * getter for id.
@@ -318,6 +325,42 @@ public class LjRoomInfo extends AbstractCommonEntity {
      */
     public void setKbn(final Kbn aKbn) {
         this.kbn = aKbn;
+    }
+
+    /**
+     * getter for lastPay.
+     * 
+     * @return lastPay
+     */
+    public String getLastPay() {
+        return this.lastPay;
+    }
+
+    /**
+     * setter for lastPay.
+     * 
+     * @param lastPay lastPay
+     */
+    public void setLastPay(final String lastPay) {
+        this.lastPay = lastPay;
+    }
+
+    /**
+     * getter for lastPeriod.
+     * 
+     * @return lastPeriod
+     */
+    public String getLastPeriod() {
+        return this.lastPeriod;
+    }
+
+    /**
+     * setter for lastPeriod.
+     * 
+     * @param aLastPeriod lastPeriod
+     */
+    public void setLastPeriod(final String aLastPeriod) {
+        this.lastPeriod = aLastPeriod;
     }
 
 }

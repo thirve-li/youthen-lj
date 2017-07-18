@@ -106,7 +106,7 @@ public class LjFeeHistoryAjaxAction extends AbstractAjaxAction {
                     return Msg;
                 }
             }
-            if (this.dto.getFee() == 0) {
+            if (StringUtils.isEmpty(this.dto.getFee())) {
                 Msg = "缴费金额不得为0";
                 return Msg;
             }

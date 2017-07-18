@@ -13,6 +13,7 @@
 		<many-to-one name="kbn" class="com.youthen.master.persistence.entity.Kbn" column="KBN_ID" insert="false" update="false" lazy="false" not-found="ignore"></many-to-one>
 		<property name="code" column="CODE" type="java.lang.String" />
 		<property name="name" column="NAME" type="java.lang.String" />
+		<property name="lastPeriod" column="lAST_PERIOD" type="java.lang.String" />
 		<property name="buildingNo" column="BUILDING_NO" type="java.lang.Integer"/>
         <property name="unitNo" column="UNIT_NO" type="java.lang.Integer"/>
         <property name="roomNo" column="ROOM_NO" type="java.lang.Integer"/>

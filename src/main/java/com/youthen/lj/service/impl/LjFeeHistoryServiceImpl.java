@@ -209,7 +209,7 @@ public class LjFeeHistoryServiceImpl implements LjFeeHistoryService {
             dto.setType(0);
             final double feemoney =
                     buildingList.get(i).getRoomInfo().getTotalPrice();
-            dto.setFee(feemoney);
+            dto.setFee(String.valueOf(feemoney));
             dto.setFeeMonth(1);
             try {
                 insert(dto);

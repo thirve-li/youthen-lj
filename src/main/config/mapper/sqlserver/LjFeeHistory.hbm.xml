@@ -18,7 +18,7 @@
         <property name="parkNo" column="PARK_NO" type="java.lang.String"/>
         <property name="lastPeriod" column="LAST_PERIOD" type="java.lang.Integer"/>
         <property name="feeMonth" column="FEE_MONTH" type="java.lang.Integer"/>
-        <property name="fee" column="FEE" type="java.lang.Double"/>
+        <property name="fee" column="FEE" type="java.lang.String"/>
 		<property name="payDate" column="PAY_DATE" type="java.util.Date" />
 		<property name="type" column="TYPE" type="java.lang.Integer" />
 		<property name="payType" column="PAY_TYPE" type="java.lang.Integer" />

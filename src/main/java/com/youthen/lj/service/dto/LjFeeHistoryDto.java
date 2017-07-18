@@ -88,7 +88,7 @@ public class LjFeeHistoryDto extends MasterEntryDto {
     /**
      * 缴费金额
      */
-    private double fee;
+    private String fee;
 
     /**
      * 缴费日期
@@ -337,7 +337,7 @@ public class LjFeeHistoryDto extends MasterEntryDto {
      * 
      * @return fee
      */
-    public double getFee() {
+    public String getFee() {
         return this.fee;
     }
 
@@ -346,7 +346,7 @@ public class LjFeeHistoryDto extends MasterEntryDto {
      * 
      * @param aFee fee
      */
-    public void setFee(final double aFee) {
+    public void setFee(final String aFee) {
         this.fee = aFee;
     }
 

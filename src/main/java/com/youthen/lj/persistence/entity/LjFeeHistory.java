@@ -79,7 +79,7 @@ public class LjFeeHistory extends AbstractCommonEntity {
     /**
      * 缴费金额
      */
-    private double fee;
+    private String fee;
 
     /**
      * 缴费日期
@@ -318,7 +318,7 @@ public class LjFeeHistory extends AbstractCommonEntity {
      * 
      * @return fee
      */
-    public double getFee() {
+    public String getFee() {
         return this.fee;
     }
 
@@ -327,7 +327,7 @@ public class LjFeeHistory extends AbstractCommonEntity {
      * 
      * @param aFee fee
      */
-    public void setFee(final double aFee) {
+    public void setFee(final String aFee) {
         this.fee = aFee;
     }
 
