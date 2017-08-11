@@ -5,9 +5,23 @@
 
 package com.youthen.lj.action;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
@@ -76,6 +90,77 @@ public class LjFeeHistoryAction extends BaseAction {
         this.dto.setListSize(listSize);
 
         return "list";
+
+    }
+
+    @Action("export2Csv")
+    public String export2Csv() {
+
+        try {
+
+            this.dto.setPageSize(9999);
+            this.feeHistoryList = this.feeHistoryService.getFeeHistoryList(this.dto);
+            final StringBuffer content = new StringBuffer("");
+            content.append("用户姓名,缴费类别,单元代码,车位号,最后缴费期别, 缴费日期,缴费月数,缴费金额\r\n");
+            for (final LjFeeHistoryDto dto : this.feeHistoryList) {
+                content.append(dto.getUser().getName() + ",");
+                if (dto.getType().intValue() == 0) {
+                    content.append("物业费,");
+                } else if (dto.getType().intValue() == 1) {
+                    content.append("车位费,");
+                }
+                content.append(dto.getRoomCode() + ",");
+                content.append((dto.getParkNo() == null ? "" : dto.getParkNo()) + ",");
+                content.append(dto.getLastPeriod() + ",");
+                content.append(DateFormatUtils.format(dto.getPayDate(), "yyyy-MM-dd HH:mm") + ",");
+                content.append(dto.getFeeMonth() + ",");
+                content.append(dto.getFee() + "\r\n");
+            }
+
+            // 要下载的哪个文件
+            final String path = ServletActionContext.getServletContext().getRealPath("/");// 得到项目的根目录
+            final Date now = new Date();
+            final String filePath = path + "/upload/";
+            final String fileName = now.getTime() + ".csv";
+            final File file = new File(filePath + fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // true = append file
+            final FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            final BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content.toString());
+            bw.close();
+
+            // 以流的形式下载文件。
+
+            final HttpServletResponse response = ServletActionContext.getResponse();
+            final InputStream fis = new BufferedInputStream(new FileInputStream(filePath + fileName));
+            final byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            // 清空response
+            response.reset();
+            // 设置response的Header
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            response.addHeader("Content-Length", "" + file.length());
+            final OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            toClient.write(buffer);
+            toClient.flush();
+            toClient.close();
+            file.delete();
+
+        } catch (final UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (final FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
 
     }
 
