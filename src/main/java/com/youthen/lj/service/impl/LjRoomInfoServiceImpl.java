@@ -62,7 +62,7 @@ public class LjRoomInfoServiceImpl implements LjRoomInfoService {
         }
 
         if (StringUtils.isNotEmpty(aDto.getCode())) {
-            hql += " and code like'%" + aDto.getCode() + "%'";
+            hql += " and code ='" + aDto.getCode() + "'";
         }
 
         final List<LjRoomInfo> list = this.dao.getByPage(hql, aDto.getGotoPage(), aDto.getPageSize());
