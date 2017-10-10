@@ -81,6 +81,8 @@ public class LjNoticeServiceImpl implements LjNoticeService {
 
         if (noticeDto.getStatus() != null) {
             hql += " and status ='" + noticeDto.getStatus() + "'";
+        } else {
+            hql += " and status ='1'";
         }
         if (noticeDto.getType() != null) {
             hql += " and type='" + noticeDto.getType() + "'";
