@@ -1816,8 +1816,8 @@ public class LjAppServiceImpl implements LjAppService {
         final String[] code = roomCode.split("-");
         final String info = "美丽苑" + code[1] + "号" + code[2] + "室 ";
         final String lastPeriod = feeHistory.getLastPeriod() == null ? "" : feeHistory.getLastPeriod().toString();
-        long total_fee = (long) (Double.valueOf(feeHistory.getFee()) * 100);
-        total_fee = 1;
+        final long total_fee = (long) (Double.valueOf(feeHistory.getFee()) * 100);
+        // total_fee = 1;
         final String ip = getIpAddress(request);
         String sign = "";
         if ("webchat".equalsIgnoreCase(from)) {// 微信公众号支付
