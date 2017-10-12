@@ -1744,12 +1744,12 @@ public class LjAppServiceImpl implements LjAppService {
             final double totalMoney = price * Integer.valueOf(months);
             final BigDecimal d = new BigDecimal(totalMoney);
             d.setScale(2, BigDecimal.ROUND_HALF_UP);
-            feeHistory.setFee(String.valueOf(d.doubleValue()));
+            feeHistory.setFee(String.valueOf(d.floatValue()));
         }
         else {
             final BigDecimal d = new BigDecimal(total);
             d.setScale(2, BigDecimal.ROUND_HALF_UP);
-            feeHistory.setFee(String.valueOf(d.doubleValue()));
+            feeHistory.setFee(String.valueOf(d.floatValue()));
         }
 
         if (roomInfo != null) {

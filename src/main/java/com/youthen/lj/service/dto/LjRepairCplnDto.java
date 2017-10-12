@@ -77,7 +77,7 @@ public class LjRepairCplnDto extends MasterEntryDto {
     private Integer status;
 
     /**
-     * 报修人
+     * 处理人
      */
     private String repairMan;
 
