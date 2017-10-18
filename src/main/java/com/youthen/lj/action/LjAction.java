@@ -13,6 +13,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import com.youthen.framework.presentation.action.BaseAction;
+import com.youthen.framework.util.CommonUtils;
 import com.youthen.lj.service.LjRoomInfoService;
 import com.youthen.master.persistence.entity.LoginUser;
 import com.youthen.master.service.LoginUserService;
@@ -65,6 +66,12 @@ public class LjAction extends BaseAction {
         this.userDto.setCompanyId(1l);
         this.userDto.setDepartmentId(1l);
         this.userList = this.loginUserService.getUserList(this.userDto);
+
+        final int listSize = this.loginUserService.getUserListCount(this.userDto);
+        final int pages = CommonUtils.countPages(listSize, this.userDto.getPageSize());
+        this.userDto.setPages(pages);
+        this.userDto.setListSize(listSize);
+
         return "listUser";
 
     }
