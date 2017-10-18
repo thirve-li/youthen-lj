@@ -133,4 +133,22 @@ public class LjAction extends BaseAction {
         this.userList = aUserList;
     }
 
+    /**
+     * getter for userDto.
+     * 
+     * @return userDto
+     */
+    public LoginUserDto getUserDto() {
+        return this.userDto;
+    }
+
+    /**
+     * setter for userDto.
+     * 
+     * @param aUserDto userDto
+     */
+    public void setUserDto(final LoginUserDto aUserDto) {
+        this.userDto = aUserDto;
+    }
+
 }
